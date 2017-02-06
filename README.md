@@ -1,6 +1,6 @@
 # electron-react-tutorial
 
-This project is a learning resource designed to show how Electron, React, and webpack and Routing can work together.
+This project is a learning resource designed to show how Electron, Reactjs, and webpack and Routing can work together. Small example which includes use of DataTable and Modal-Popups.
 
 ### Instructions to run project
 
