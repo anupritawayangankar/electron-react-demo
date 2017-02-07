@@ -12,8 +12,8 @@ export default React.createClass({
         <Route path="/" component={TabLogin} />
         <Route path="/login" component={TabLogin}/>
         <Route path="/register" component={TabRegister}/>    
-        <Route path="/admin/:userName/:password" component={AdminUI}/> 
-        <Route path="/user/:userName/:password" component={UserUI}/> 
+        <Route path="/admin/:userName" component={AdminUI}/> 
+        <Route path="/user/:userName" component={UserUI}/> 
       </Router>
     )
   }
