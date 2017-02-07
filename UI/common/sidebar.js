@@ -1,7 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router';
 
-var sidebar =  React.createClass({
+var sidebar = React.createClass({
   render() {
+
+    const sidebarItems = this.props.sidebarLinks;
+    const curretPage = this.props.curretPage;
+    const name = this.props.userName;
 
     return (<nav className="navbar navbar-default navbar-fixed-top" role="navigation" style={{ marginBottom: 0 }}>
       <div className="navbar-header">
@@ -28,15 +33,19 @@ var sidebar =  React.createClass({
       <div className="navbar-default sidebar" role="navigation">
         <div className="sidebar-nav navbar-collapse">
           <ul className="nav in" id="side-menu">
-            <li>
-              <a href="#" id="hypGame" className="active">Link1</a>
-            </li>
-            <li>
-              <a href="#" id="hypLeague">Link2</a>
-            </li>
-            <li>
-              <a href="#" id="hypTeam">Link3</a>
-            </li>
+
+            {sidebarItems.map(function (item, index) {
+              if ({item}.item == curretPage) {
+                return <li key={index}>
+                  <Link className="active" to={`/${item.toLowerCase()}/${name}`}>{item}</Link>
+                </li>;
+              }
+              else {
+                return <li key={index}>
+                  <Link to={`/${item.toLowerCase()}/${name}`}>{item}</Link>
+                </li>;
+              }
+            })}
           </ul>
         </div>
       </div>
