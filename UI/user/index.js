@@ -38,7 +38,7 @@ var UserUI = React.createClass({
         var status = "";
 
         /* Loop to create Array of Array to bind Table */
-        for (var i = 0; i < data.length-1; i++)
+        for (var i = 0; i < data.length - 1; i++)
           dataSet.push([data[i].id, data[i].title, "<a class='editUser' id='" + data[i].id + "' onClick={this.showModal}>Edit</a>"])
 
         $('#tblList').DataTable({
@@ -58,7 +58,7 @@ var UserUI = React.createClass({
             '</select> records'
           }
         });
-         
+
         console.log('success');
       }.bind(this),
       error: function (xhr, status, err) {
@@ -69,6 +69,7 @@ var UserUI = React.createClass({
   },
   render() {
     const { userName, password } = this.props.params
+    var sidebarLinks = ['Admin', 'User'];
     var rows = [];
     this.state.entries.forEach(function (item) {
       rows.push(<tr key={item.id}><td>{item.id}</td><td>{item.title}</td><td><Link> Edit </Link></td></tr>);
@@ -85,8 +86,8 @@ var UserUI = React.createClass({
         <Modal.Footer>
           <Button onClick={this.close}>Close</Button>
         </Modal.Footer>
-      </Modal>      
-      <Sidebar userName={userName}></Sidebar>
+      </Modal>
+      <Sidebar userName={userName} sidebarLinks={sidebarLinks} curretPage={'User'}></Sidebar>
       <div id="page-wrapper">
         <div className="row">
           <div className="panel panel-default margin-top-15">
