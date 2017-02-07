@@ -1,59 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router';
+import Sidebar from '../common/sidebar'
 
-//class AdminUI extends React.Component{
-var ModalHeader = React.createClass({
-  render: function () {
-    return (
-      <div className="modal-header">
-        {this.props.title}
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    )
-  }
-});
-
-var ModalBody = React.createClass({
-  render: function () {
-    return (
-      <div className="modal-body">
-        {this.props.content}
-      </div>
-    )
-  }
-});
-
-var ModalFooter = React.createClass({
-  render: function () {
-    return (
-      <div className="modal-footer">
-        <button type="button" className="btn btn-primary">Submit</button>
-      </div>
-    )
-  }
-});
-
-var Modal = React.createClass({
-  render: function () {
-    return (<div className="modal fade">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <ModalHeader title="Modal Title"/>
-            <ModalBody content = "Modal Content" />
-            <ModalFooter />
-          </div>
-        </div>
-      </div>)
-  }
-});
-
+var Button = require('react-bootstrap').Button;
+var Modal = require('react-bootstrap').Modal;
 
 var AdminUI = React.createClass({
   
-  getInitialState: function() {
-    return {entries: []};
+  getInitialState: function () {
+    return {
+      entries: [],
+      showModal: false
+    };
+  },
+  close() {
+    this.setState({ showModal: false });
+  },
+
+  open() {
+    this.setState({ showModal: true });
   },
 
   editClick: function() {
@@ -66,8 +31,33 @@ var AdminUI = React.createClass({
           dataType: 'json',
           cache: false,
           success: function(data) {
-            console.log(data);
             this.setState({entries: data});
+
+            var dataSet = [];
+        var status = "";
+
+        /* Loop to create Array of Array to bind Table */
+        for (var i = 0; i < data.length - 1; i++)
+          dataSet.push([data[i].id, data[i].title, "<a class='editUser' id='" + data[i].id + "' onClick={this.showModal}>Edit</a>"])
+
+        $('#tblList').DataTable({
+          destroy: true,
+          data: dataSet,
+          columns: [
+            { title: "ID" },
+            { title: "Title" },
+            { title: "" }
+          ]
+          , "pageLength": 10,
+          "oLanguage": {
+            "sLengthMenu": 'Display <select class="form-control">' +
+            '<option value="10">10</option>' +
+            '<option value="15">15</option>' +
+            '<option value="20">20</option>' +
+            '</select> records'
+          }
+        });
+
             console.log('success');
           }.bind(this),
           error: function(xhr, status, err) {
@@ -76,32 +66,55 @@ var AdminUI = React.createClass({
           }.bind(this)
         });
   },
-  render() {    
-    /*const { userName, password } = this.props.params
-    return ( Test api link ... if u need to use in proj 
-    https://jsonplaceholder.typicode.com/
-      <div>
-        <h2>Welcome {userName}, your passord is : {password}</h2>
-      </div>
-    )*/
-
+  render() {
+    const { userName, password } = this.props.params
+    var sidebarLinks = ['Admin', 'User'];
     var rows = [];
-      this.state.entries.forEach(function(item){
-        rows.push(<tr key={item.id}><td>{item.id}</td><td>{item.title}</td><td><Link> Edit </Link></td></tr>);
-      });
-      
-        return (<table className="table table-bordered table-responsive">
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th onClick={this.showModal}></th>
-        </tr>
-        </thead>
-        <tbody>
-        {rows}
-        </tbody>
-      </table>);
+    this.state.entries.forEach(function (item) {
+      rows.push(<tr key={item.id}><td>{item.id}</td><td>{item.title}</td><td><Link> Edit </Link></td></tr>);
+    });
+
+    return (<div id="wrapper">
+      <Modal show={this.state.showModal} onHide={this.close}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Text in a modal</h4>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={this.close}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+      <Sidebar userName={userName} sidebarLinks={sidebarLinks} curretPage={'Admin'}></Sidebar>
+      <div id="page-wrapper">
+        <div className="row">
+          <div className="panel panel-default margin-top-15">
+            <div className="panel-heading">
+              <div className="panel-body no-padding">
+                <div className="pull-left">
+                  <h3 className="no-margin padding-top-5">Admin List</h3>
+                </div>
+                <div className="pull-right">
+                  <Button
+                    bsStyle="primary"
+                    bsSize="large"
+                    onClick={this.open}>
+                    Create
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="panel-body">
+              <table id="tblList" width="100%"
+                className="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
+                role="grid">
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>);
   }
 })
 
