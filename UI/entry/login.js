@@ -20,7 +20,7 @@ submitClick: function (event) {
   event.preventDefault()
   const userName = event.target.elements[0].value
   const password = event.target.elements[1].value
-  const path = `/user/${userName}/${password}`
+  const path = `/user/${userName}`
   this.context.router.push(path)
                 
   },
